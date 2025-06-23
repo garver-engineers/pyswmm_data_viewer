@@ -1,6 +1,10 @@
 # %%
 from pyswmm import Simulation, Nodes, Links
 import matplotlib.pyplot as plt
+import pandas as pd
+# from tqdm import tqdm
+from tqdm.notebook import tqdm
+
 
 # %%
 inp_path = r"\\garverinc.local\gdata\Projects\2022\22A28803 - DFW Terminal F Design Build\Quality Program\QAQC\Reviews\95% EPASWMM  MODEL\Proposed_RE_EC_25yr_v3.inp"
@@ -122,9 +126,16 @@ with Simulation(inp_path) as sim:
             data_dict["links"].setdefault(link_id, {}).setdefault(param, [])
         data_dict["links"][link_id].setdefault("time", [])
 
-    # Step through the simulation once
-    for step in sim:
+   
+    # Estimate total steps (optional: based on report step and duration)
+    # total_steps = sim.end_time - sim.start_time
+    # total_steps = int(total_steps.total_seconds() / sim.report_step.total_seconds())
+
+    # Step through the simulation with tqdm
+    for step in tqdm(sim, desc="Running SWMM Simulation"):
+    # for step in sim:
         current_time = sim.current_time
+
 
         for node_id in node_ids:
             node = nodes[node_id]
