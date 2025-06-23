@@ -145,17 +145,38 @@ data_dict
 # %%
 # convert dict to a pandas dataframe
 import pandas as pd
+nodes_df = pd.DataFrame.from_dict(
+    {node_id: data_dict["nodes"][node_id] for node_id in node_ids},
+    orient='index'
+)
+links_df = pd.DataFrame.from_dict(
+    {link_id: data_dict["links"][link_id] for link_id in link_ids},
+    orient='index'
+)
+
+#%%
+links_df.head()
 
 # %%
-# plotting the results
+# plot the first node head and total inflow
 plt.figure(figsize=(12, 6))
-plt.plot(times, depths, label=f'Node {node_id}', color='blue')
-plt.xlabel('Time')
-plt.ylabel('Depth (ft or m)')
-plt.title(f'Depth Over Time for Node {node_id}')
-plt.grid(True)
+plt.subplot(2, 1, 1)
+plt.plot(nodes_df["time"].iloc[0], nodes_df["head"].iloc[0], label=node_ids[0])
+plt.title(f"Node {node_ids[0]} Head Over Time")
+plt.xlabel("Time")
+plt.ylabel("Head (ft)")
+plt.legend()
+plt.subplot(2, 1, 2)
+plt.plot(nodes_df["time"].iloc[0], nodes_df["total_inflow"].iloc[0], label=node_ids[0])
+plt.title(f"Node {node_ids[0]} Total Inflow Over Time")
+plt.xlabel("Time")
+plt.ylabel("Total Inflow (CFS)")
 plt.legend()
 plt.tight_layout()
 plt.show()
 
+# %%
+# export nodes_df and links_df to csv
+nodes_df.to_csv("nodes_data.csv", index=False)
+links_df.to_csv("links_data.csv", index=False)
 # %%
