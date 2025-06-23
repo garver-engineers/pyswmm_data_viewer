@@ -1,4 +1,4 @@
-# SWMM Tineseries dataviewer
+# SWMM Timeseries dataviewer
 Give a list of links and nodes along with their respective parameters and let the script go to work
 
 # Output
